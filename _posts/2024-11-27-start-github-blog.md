@@ -1,7 +1,7 @@
 ---
 title: 내가 깃허브 블로그를 시작하는 이유
 author: scorchedrice
-date: 2024-11-27 18:00:00 +0800
+date: 2024-11-27 18:00:00 +0900
 categories: [Blogging]
 tags: [일상]
 render_with_liquid: false
