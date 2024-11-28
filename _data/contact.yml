@@ -3,8 +3,9 @@
 - type: github
   icon: "fab fa-github"
 
-- type: twitter
-  icon: "fa-brands fa-x-twitter"
+- type: instagram
+  icon: "fab fa-instagram"
+  url: "https://instagram.com/jwoong_h"
 
 - type: email
   icon: "fas fa-envelope"
