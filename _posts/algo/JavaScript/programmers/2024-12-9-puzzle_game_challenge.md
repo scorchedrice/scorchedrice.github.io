@@ -113,9 +113,11 @@ const copyA = [...a] // a값이 복사
 
 ### JavaScript의 동작 방식과 전개연산자의 상관관계
 
-<img src="/assets/img/Algorithm/programmers/241209/eventloop.png">
+<img src="/assets/img/Algorithm/programmers/241209/node_eventloop.webp" alt="node event loop">
 
-JavaScript는 함수를 호출할 때 인자를 스택에 푸시한다. 싱글스레드(하나의 콜스택)로 콜스택에 명령을 쌓고, 이를 빼는 과정으로 연산을 진행한다. 
+출처 : https://smit90.medium.com/deep-dive-into-the-event-loop-understanding-node-js-internals-f9263ef91233
+
+JavaScript V8엔진은 함수를 호출할 때 인자를 스택에 푸시한다. 싱글스레드(하나의 콜스택)로 콜스택에 명령을 쌓고, 이를 빼는 과정으로 연산을 진행한다. 
 
 근데, 전개연산자는 모든 배열 요소를 개별 인자로 반환하기에 함수에 전개연산자를 활용한다면 스택오버플로우 및 메모리 부족 현상이 발생할 수 있다.
 
