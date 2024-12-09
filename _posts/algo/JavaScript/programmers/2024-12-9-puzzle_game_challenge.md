@@ -1,7 +1,7 @@
 ---
 title: "[Algorithm, JavaScript] 전개연산자 런타임 에러는 왜 발생하나 (PCCP 기출 - 퍼즐게임 챌린지)"
 author: scorchedrice
-date: 2024-12-2 16:00:00 +0900
+date: 2024-12-9 16:00:00 +0900
 categories: [Algorithm, JavaScript]
 tags: [이분탐색, 프로그래머스, 전개연산자, 런타임에러]
 render_with_liquid: false
