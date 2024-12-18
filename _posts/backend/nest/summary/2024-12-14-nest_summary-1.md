@@ -7,8 +7,6 @@ tags: [nest.js, token, session, jwt, summary, auth]
 render_with_liquid: false
 ---
 
-아직 미완성된 게시글입니다. (auth 제외 작성 완료.)
-
 무작정 강의를 따라치기보단 어느 정도까지 진행되었을 때, 혼자 해보는 것이 좋다고 판단하여 진행
 
 # 해당 과정까지 개발 순서
