@@ -29,7 +29,7 @@ nest new jw_sns
 ```
 - 나의 경우엔 jw_sns라는 이름의 프로젝트를 시작한다.
 - 또한 필요한 것들을 다운로드한다.
-  - typeORM
+  - typeORM, @nestjs/typeorm
 - DB를 연결한다.
   - postgres사용시 yarn add pg
   - docker-compose.yaml 작성
@@ -457,4 +457,232 @@ export class AuthModule {}
 
 #### auth.service.ts
 
+로그인 과정은 다음의 과정으로 진행한다.
+
+1. loginWithEmail 함수 실행 (로그인 시작 함수)
+2. authenticateWithEmailAndPassword 함수 실행 (검증)
+   1. 사용자 존재 여부 확인
+   2. 비밀번호 일치여부 확인
+   3. 유효한 경우 사용자 정보 반환
+3. loginUser 함수 호출 (검증 통과한 경우 실행)
+   1. signToken 호출하여 refresh와 access 토큰 생성
+
+그리고 회원가입은 다음의 과정으로 진행한다.
+
+1. registerWithEmail 함수 실행 (회원가입 실행 함수)
+2. 비밀번호를 암호화하여 usersService의 함수 활용하여 DB 연결
+3. 회원가입 이후 로그인이 되도록 하려면 이후 로그인 과정 진행 (바로 loginUser 함수 호출)
+
+정의해야하는 로직은 다음과 같다.
+
+1. Header에 담아서 보낸 토큰을 확인하는 로직
+2. Basic 인증과정
+3. 토큰 검증과정
+4. Refresh 토큰으로 새로운 Access 토큰을 발급받는 과정
+5. JWT 토큰을 생성하는 로직
+6. 로그인
+7. 회원가입
+
+##### 토큰 관련 로직
+
+토큰 관련된 로직은 다음과 같은 로직이 필요하다.
+1. Header에서 토큰 빼기
+2. 토큰의 유효성 확인하기 (검증)
+3. 토큰 등록
+4. access 토큰의 재발급 과정
+5. Basic 요청이 온 경우 이를 바탕으로 해당 유저 검증하기
+   1. email, password로 분리하고
+   2. DB에서 유저 정보가 있는지 판단
+
+```ts
+// 1. 토큰 추출 - Header에 담긴 값을 바탕으로 토큰을 확인
+extractTokenFromHeader(header: string, isBearer: boolean) {
+  const splitToken = header.split(' ');
+  const prefix = isBearer ? 'Bearer' : 'Basic';
+  if (splitToken.length !== 2 || splitToken[0] !== prefix) {
+    throw new UnauthorizedException('Header에 담긴 토큰의 유형이 잘못되었습니다.')
+  }
+  const token = splitToken[1];
+  return token;
+}
+
+// 2. 토큰의 유효성 확인
+verifyToken(token: string) {
+  return this.jwtService.verify(token, {
+    secret: JWT_SECRET,
+  });
+}
+
+// 3. 토큰 등록 - refresh와 access 발급
+signToken(user: Pick<UsersModel, 'email' | 'id'>, isRefreshToken: boolean) {
+  const payload = {
+    email : user.email,
+    id : user.id,
+    type : isRefreshToken ? 'refresh' : 'access',
+  };
+  return this.jwtService.sign(payload, {
+    secret : JWT_SECRET,
+    expiresIn : isRefreshToken ? 3600 : 300,
+  })
+}
+
+// 4. 토큰의 재발급 과정
+rotateToken(token: string, isRefreshToken: boolean) {
+  const decoded = this.jwtService.verify(token, {
+    secret: JWT_SECRET,
+  });
+
+  if (decoded.type !== 'refresh') {
+    throw new UnauthorizedException(
+      '토큰 재발급은 refresh token으로만 해야합니다.',
+    );
+  }
+  return this.signToken(
+    {
+      ...decoded,
+    },
+    isRefreshToken,
+  );
+}
+
+// 5. Basic 요청 => 로그인 유저 정보 확인 - 해당 값을 바탕으로 로그인 유효성을 판단한다.
+decodeBasicToken(base64String: string) {
+  const decoded = Buffer.from(base64String, 'base64').toString('utf8');
+  const split = decoded.split(':');
+  if (split.length !== 2) {
+    throw new UnauthorizedException('Header에 담은 토큰 형식이 잘못되었습니다.')
+  }
+  const email = split[0];
+  const password = split[1];
+  return {
+    email,
+    password,
+  }
+}
+```
+
+##### 위의 토큰 관련 로직을 활용한 기능 구현
+
+```ts
+// 1. 로그인 과정
+async loginWithEmail(user: Pick<UsersModel, 'email' | 'password'>) {
+  const existingUser = await this.authenticateWithEmailAndPassword(user);
+  return this.loginUser(existingUser);
+}
+
+// 1-1 존재하는 유저인지 판단.
+async authenticateWithEmailAndPassword(
+  user: Pick<UsersModel, 'email' | 'password'>,
+) {
+  // a. 사용자 정보 확인
+  const existingUser = await this.usersService.getUserByEmail(user.email);
+  if (!existingUser) {
+    throw new UnauthorizedException('존재하지 않는 사용자입니다.');
+  }
+
+  // b. 비밀번호의 비교
+  // 앞엔 일반 비밀번호 뒤엔 hash값
+  const checkPass = await bcrypt.compare(
+    user.password,
+    existingUser.password,
+  );
+  if (!checkPass) {
+    throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+  }
+
+  return existingUser;
+}
+
+// 1-2 유효한 유저라면 토큰 발급 과정 진행
+loginUser(user: Pick<UsersModel, 'email' | 'id'>) {
+  return {
+    accessToken: this.signToken(user, false),
+    refreshToken: this.signToken(user, true),
+  };
+}
+```
+
+```ts
+// 2. 회원가입
+async registerWithEmail(
+  user: Pick<UsersModel, 'email' | 'password' | 'nickname'>,
+) {
+  // bcrypt의 경우 해시화 하고 싶은 패스워드 , round를 변수로 적는다.
+  // rounds는 hash에 소요되는 시간을 의미한다.
+  const hash = await bcrypt.hash(user.password, HASH_ROUNDS);
+
+  const newUser = await this.usersService.createUser({
+    ...user,
+    password: hash,
+  });
+  return this.loginUser(newUser);
+}
+```
+
 #### auth.controller.ts
+
+controller의 역할은 service로의 연결을 잘 해주는 길 안내 역할이므로 service에서 정의한 함수가 요구하는 것을 잘 전달만 해주면 된다.
+
+우리가 안내해줘야 하는 목적지는 다음과 같다.
+
+1. 이메일로 로그인하기 (service에서 loginWithEmail로 실행, 토큰, 이메일, 비밀번호 필요)
+   1. Basic Token을 받고 이를 service로 전달. service는 이를 decode 하여 이메일과 비밀번호를 판별한다.
+2. 회원가입하기 (registerWithEmail로 실행, 이메일, 비밀번호, 닉네임 필요)
+3. 토큰 재발급 (access and refresh)
+
+```ts
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('token/access')
+  postTokenAccess(
+    @Headers('authorization') rawToken: string,) {
+    const token = this.authService.extractTokenFromHeader(rawToken, true);
+    /**
+     * 반환 => accessToken : {token}
+     */
+    const newToken = this.authService.rotateToken(token, false)
+
+    return {
+      accessToken : newToken,
+    }
+  }
+
+  @Post('token/refresh')
+  postTokenRefresh(
+    @Headers('authorization') rawToken: string,) {
+    const token = this.authService.extractTokenFromHeader(rawToken, true);
+    /**
+     * 반환 => accessToken : {token}
+     */
+    const newToken = this.authService.rotateToken(token, true)
+
+    return {
+      refreshToken : newToken,
+    }
+  }
+
+  @Post('login/email')
+  postLoginEmail(
+    @Headers('authorization') rawToken: string,
+    @Body('email') email: string,
+    @Body('password') password: string,
+  ) {
+    const token = this.authService.extractTokenFromHeader(rawToken, false);
+    const credentials = this.authService.decodeBasicToken(token);
+
+    return this.authService.loginWithEmail(credentials);
+  }
+
+  @Post('register/email')
+  postRegisterEmail(
+    @Body('email') email: string,
+    @Body('password') password: string,
+    @Body('nickname') nickname: string,
+  ) {
+    return this.authService.registerWithEmail({email, password, nickname})
+  }
+}
+
+```
