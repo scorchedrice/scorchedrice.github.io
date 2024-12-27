@@ -10,6 +10,10 @@ mermaid: true
 
 # Guard란
 
+Nest의 라이프사이클을 보면 Guards는 로직처리구간 이전에 위치함을 알 수 있다.
+
+Pipe에 도달하기 이전에 위치하기에 Guard를 통해 비효율적인 코드 실행을 방지할 수 있다.
+
 ```mermaid
 flowchart LR
   Client1[Request] --> Middleware
@@ -32,10 +36,6 @@ flowchart LR
   style Logic fill:#4169E1,stroke:#333,stroke-width:2px
   style Guards fill:#800000,stroke:#4169E1,stroke-width:4px,color:#fff
 ```
-
-Nest의 라이프사이클을 보면 Guards는 로직처리구간 이전에 위치함을 알 수 있다.
-
-Pipe에 도달하기 이전에 위치하기에 Guard를 통해 비효율적인 코드 실행을 방지할 수 있다.
 
 또, Guard는 인증과정에서 주로 사용하는데, Guard를 사용하면 인증 로직을 깔끔하게 분리하고 재사용할 수 있으며 컨트롤러에선 핵심 비즈니스 로직에만 집중할 수 있다는 장점이 있다.
 
