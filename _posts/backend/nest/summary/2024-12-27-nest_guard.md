@@ -1,6 +1,5 @@
 ---
 title: "[Nest.js 정리] Guard, CustomDecorator"
-author: scorchedrice
 date: 2024-12-27 15:00:00 +0900
 categories: [Backend, Nest정리]
 tags: [nest.js, summary, guard, decorator, customDecorator]

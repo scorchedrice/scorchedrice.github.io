@@ -1,6 +1,5 @@
 ---
 title: 카카오 페이 증권 인터뷰 후기
-author: scorchedrice
 date: 2025-1-17 14:00:00 +0900
 categories: [Blogging, 회고]
 tags: [일상, 면접]

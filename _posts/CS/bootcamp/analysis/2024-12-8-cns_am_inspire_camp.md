@@ -1,6 +1,5 @@
 ---
 title: "[CS, BootCamp] LG CNS AM Inspire Camp 분석"
-author: scorchedrice
 date: 2024-12-8 23:00:00 +0900
 categories: [CS, BootCamp분석]
 tags: [bootcamp, cs]

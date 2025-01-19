@@ -1,6 +1,5 @@
 ---
 title: "[Nest.js 정리] 로그인과정까지 흐름"
-author: scorchedrice
 date: 2024-12-14 03:00:00 +0900
 categories: [Backend, Nest정리]
 tags: [nest.js, token, session, jwt, summary, auth]

@@ -1,6 +1,5 @@
 ---
 title: 카카오 페이 증권 과제 및 코딩테스트 회고
-author: scorchedrice
 date: 2025-1-5 17:00:00 +0900
 categories: [Blogging, 회고]
 tags: [일상]

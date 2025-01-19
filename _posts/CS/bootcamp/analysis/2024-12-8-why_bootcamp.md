@@ -1,6 +1,5 @@
 ---
 title: "[CS, BootCamp] 부트캠프 커리큘럼을 분석하는 이유"
-author: scorchedrice
 date: 2024-12-8 22:00:00 +0900
 categories: [CS, BootCamp분석]
 tags: [bootcamp, cs, 일상]
