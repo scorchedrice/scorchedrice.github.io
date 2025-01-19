@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://scorchedrice.github.io/sitemap.xml
