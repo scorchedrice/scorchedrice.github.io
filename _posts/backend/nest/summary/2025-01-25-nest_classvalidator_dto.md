@@ -34,7 +34,6 @@ mermaid: true
   } 
   ```
   만약 이와같은 예시가 있다면, 다음처럼 DTO를 설정하고 간단하게 변경할 수 있다.
-
   ```ts
   // posts/dto/create-post.dto.ts
   export class CreatePostDto {
@@ -72,7 +71,9 @@ mermaid: true
     return this.postsService.createPost(authorId, body);
   }
   ```
+  
 ## 설치
+
 ```shell
 yarn add class-validator class-transformer
 ```
