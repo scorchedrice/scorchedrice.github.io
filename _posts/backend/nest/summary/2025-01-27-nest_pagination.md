@@ -211,3 +211,4 @@ async pagePaginate(dto: PaginatePostDto) {
 
 **Cursor Based를 생각하면 매우 단순하다.**
 
+다음에는 위의 로직을 어떤식으로 일반화하고 확장할 수 있는지 알아보자.
