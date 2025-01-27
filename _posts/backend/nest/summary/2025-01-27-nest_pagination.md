@@ -1,5 +1,5 @@
 ---
-title: "[Nest.js 정리] Pagination개념과 Cursor Based Pagination 구현"
+title: "[Nest.js 정리] Pagination개념, Cursor/Page Based Pagination 구현"
 date: 2025-01-27 01:00:00 +0900
 categories: [Backend, Nest정리]
 tags: [nest.js, summary, Pagination]
@@ -158,4 +158,56 @@ async paginatePosts(dto: PaginatePostDto) {
 }
 ```
 
-다음엔 일반적인 Pagination과 Pagination을 일반화하는 과정에 대해 학습하고 업로드할 예정이다.
+## Page Based Pagination
+위에서 구현한 Cursor Based Pagination 보다 상당히 구현하기가 쉽다. Cursor Based는 마지막 항목에 대한 정보를 받고, 이를 적용한 url을 FE에 제공하여 이를 다시 요청하도록 해야했다면
+Page Based의 경우 그냥 몇 페이지인지 요청받고, 해당 페이지 이전까지의 값을 스킵해서 응답하도록 구현하면된다.
+
+우선, 위에서 만든 코드를 일부 수정해보자. page값을 dto에 추가하여 page값이 들어온경우엔 Page Based, 아닌 경우엔 Cursor Based로 처리한다.
+
+```ts
+export class PaginatePostDto {
+  // page값이 존재한다 => 페이지 기반의 pagination을 적용한다.
+  @IsNumber()
+  @IsOptional()
+  page?: number;
+  
+  // ...
+}
+```
+
+이후 이를 service에서 분리하자. 기존에 사용한 `paginatePosts`를 분리하는 함수로 바꾸고, 기존의 로직은 `cursorPaginate`로 새로 정의한다.
+
+```ts
+async paginatePosts(dto: PaginatePostDto) {
+  if (dto.page) {
+    // 페이지가 존재한다 => pagePaginate
+    return this.pagePaginate(dto);
+  } else {
+    // 페이지가 없는 경우 => cursorPaginate
+    return this.cursorPaginate(dto);
+  }
+}
+```
+
+자, 이제 pagePaginate를 구현해보자.
+
+```ts
+async pagePaginate(dto: PaginatePostDto) {
+  const [posts, count] = await this.postsRepository.findAndCount({
+    // 1번 페이지부터 시작하고, 페이지마다 갯수가 정해져 있음.
+    // 특정 페이지는 1번페이지부터 특정 페이지 전 페이지까지의 갯수를 스킵
+    skip: dto.take * (dto.page - 1),
+    take: dto.take,
+    order: {
+      createdAt: dto.order__createdAt,
+    },
+  });
+  return {
+    data: posts,
+    total: count,
+  };
+}
+```
+
+**Cursor Based를 생각하면 매우 단순하다.**
+
