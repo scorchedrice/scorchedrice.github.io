@@ -15,10 +15,10 @@ mermaid: true
 
 # 목차
 
-> ### 1. Docker에서 이미지 찾기
-> ### 2. docker-compose 파일 작성하기
+> 1. Docker에서 이미지 찾기
+> 2. docker-compose 파일 작성하기
 
-# Docker에서 이미지 찾기
+## Docker에서 이미지 찾기
 
 우선 나는 3가지를 Docker Image로 찾으려한다.
 
@@ -28,7 +28,7 @@ mermaid: true
 
 자 그렇다면 각각 어떤 기능을 하는 것인지 간략하게 알아보자.
 
-## `kafka`
+### `kafka`
 
 `kafka`는 apache 재단에서 개발한 분산형 스트리밍 플랫폼이다. 주로 대용량의 실시간 데이터를 처리하는 데 활용한다.
 
@@ -36,7 +36,7 @@ mermaid: true
 
 `kafka`는 이와 같은 문제를 해결하기위해 링크드인에서 개발하고 현재는 `Apache Software Foundation`의 오픈 소스 프로젝트로 유지 관리되는 분산 스트리밍 플랫폼이다.
 
-### `kafka`의 구조
+#### `kafka`의 구조
 
 사실 위의 설명을 보면 이해가 어려울 수 있는데, 쉽게말해 데이터 전달의 택배회사가 `kafka`라고 생각하면된다.
 
@@ -75,7 +75,7 @@ flowchart LR
 
 일단 여기까지 알아보자. 세부적인 것은 게시글을 따로 만들어 작성하려한다.
 
-## `zookeeper`
+### `zookeeper`
 
 분산 시스템 설계를 위해 필요한 코디네이션 서비스 시스템이 구현되어있는 오픈소스이다.
 `kafka`와 같은 분산시스템에서 이를 많이 사용한다. 물론 3.0버전 이상에서는 `zookeeper` 없이 동작하는 모드가 있지만, 아직까지 안정적인 `kafka`를 위해 이를 활용한다.
@@ -88,7 +88,7 @@ flowchart LR
 
 여기서 파티션 리더라는 개념은 `kafka`에서 데이터가 어떻게 쌓이고 빠져나가는지를 이해해야하는데, 이는 `kafka`에 대한 게시글을 따로 작성하여 설명하려한다. 일단 이번 포스트에선 이정도만 알고 넘어가자.
 
-# docker-compose
+## docker-compose
 
 <img src="/assets/img/kafka/250202/kafka-docker-image.png" alt="kafka" width="300">
 
