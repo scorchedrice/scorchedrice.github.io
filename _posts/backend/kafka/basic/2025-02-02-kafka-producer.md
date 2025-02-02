@@ -7,13 +7,15 @@ render_with_liquid: false
 mermaid: true
 ---
 
-이 전편에서 `Docker`로 `Kafka`를 설정하는 것에 대해 다뤘다. 이어서 `Producer`입장에서 `Kafka`를 다뤄보자.
+이 전편에서 `Docker`로 `Kafka`를 설정하는 것에 대해 다뤘다. 이어서 `Producer`와 `Consumer` 입장에서 `Kafka`를 다뤄보자.
 
 딥한 내용보단 연결하고 보내는 것 까지 한번 진행해보자.
 
-나는 `Producer`, `Consumer`을 다른 포트의 `Nest`백엔드로 구현해서 서로 통신이 가능한지 확인하려한다.
+`Producer`, `Consumer`을 다른 포트의 `Nest`백엔드로 구현해서 서로 통신이 가능한지 확인하려한다.
 
 참고로 아래의 과정을 진행하기위해선 `kafkajs`의 설치, 전 게시물에서 다뤘던 `kafka` 세팅을 마무리 해야한다.
+
+[kafka - docker](https://scorchedrice.github.io/posts/kafka-docker/)
 
 ## 목차
 
