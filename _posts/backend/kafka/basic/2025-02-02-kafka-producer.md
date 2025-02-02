@@ -27,7 +27,7 @@ mermaid: true
 > 6. [Consumer] 접근 방식
 > 7. Consumer 연결 확인
 
-## 1. [Producer] `module.ts`
+## [Producer] `module.ts`
 
 우선, 카프카에 연결하기 위해선 카프카에 접속하기 위한 주소와 클라이언트 아이디가 필요하다. 이를 `.env`로 만들고 활용하기 위해 다음의 설정을 진행했다.
 
