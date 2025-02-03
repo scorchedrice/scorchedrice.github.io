@@ -11,6 +11,8 @@ mermaid: true
 
 이번 게시글에선 받은 kafka 데이터를 websocket으로 FE에 전달하는 로직을 구현하려한다.
 
+[구현한 코드 Github 링크](https://github.com/scorchedrice/kafka-websocket)
+
 ## `Nestjs` 소켓통신 환경 구축하기
 
 ### `yarn add`
@@ -190,7 +192,7 @@ flowchart TD
   class db dbStyle
 ```
 
-이런 나만의 개인 프로젝트를 진행한 이유도 계획중인 프로젝트에 앞서 Kafka 사용법을 알고자 함이였다.
+이런 나만의 개인 프로젝트를 진행한 이유는 계획중인 프로젝트에 앞서 Kafka 사용법을 알고자 함이였다.
 
 비록 단순히 데이터를 주고 표시하는 단순한 구현이지만 사용법을 알게되어 좋았다.
 
