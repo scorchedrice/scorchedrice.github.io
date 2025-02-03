@@ -171,9 +171,9 @@ flowchart TD
   end
 
 %% Current data flow
-  producer -->|1. Produce Message| topic
-  topic -->|2. Consume Message| consumer
-  consumer -->|3. WebSocket Event| frontend
+  producer --> topic
+  topic --> consumer
+  consumer --> frontend
 
 %% Future DB implementation
   consumer -.-|DB 저장 - 구현예정|db
