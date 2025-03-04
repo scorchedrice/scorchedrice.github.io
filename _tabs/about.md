@@ -13,5 +13,5 @@ order: 4
 > ### **한지웅** (scorchedrice)
 >   - 삼성 청년 SW 아카데미 11기 수료 (2024.01 - 2024.12)
 >   - 홍익대학교 신소재공학과 졸업 (2024.02)
->   - [포트폴리오](https://scorchedrice.github.io/my_profile) & [GitHub](https://github.com/scorchedrice)
+>   - [포트폴리오](https://scorchedrice.com) & [GitHub](https://github.com/scorchedrice)
 >     - 기술 스택과 프로젝트 경험 등 상세 정보는 포트폴리오 페이지에서 확인하실 수 있습니다.

@@ -13,7 +13,7 @@
 
 - type: profile
   icon: 'fa-solid fa-user'   # icons powered by <https://fontawesome.com/>
-  url:  'https://scorchedrice.github.io/my_profile'
+  url:  'https://scorchedrice.com'
 
 #- type: rss
 #  icon: "fas fa-rss"
